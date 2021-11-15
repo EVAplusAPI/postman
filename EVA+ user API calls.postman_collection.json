@@ -1,0 +1,983 @@
+{
+	"info": {
+		"_postman_id": "2c2e8b10-0aa4-430d-976e-e0b564d595a0",
+		"name": "EVA+ user API calls",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responseData=pm.response.json();\r",
+							"console.log(responseData);\r",
+							"pm.environment.set(\"evatoken\", responseData.token);\r",
+							"\r",
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is json\", () => {\r",
+							"  pm.response.to.be.json;  \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": {{apiuser}},\r\n    \"password\": {{apipw}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{tenant}}.evaplus.com/EvaCloudAPI/login",
+					"protocol": "https",
+					"host": [
+						"{{tenant}}",
+						"evaplus",
+						"com"
+					],
+					"path": [
+						"EvaCloudAPI",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getVehicleFleet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"content is json\", () => {\r",
+							"  pm.response.to.be.json;  \r",
+							"});\r",
+							"pm.test(\"within user limit\", function () \r",
+							"{\r",
+							"    pm.expect(pm.response.text()).to.not.include(\"User limit exceeded!\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log(\"waiting \"+pm.variables.get(\"timeout\")+\"ms\");\r",
+							"setTimeout(() => {}, pm.variables.get(\"timeout\")); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{evatoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{tenant}}.evaplus.com/EvaCloudAPI/getVehicleFleet",
+					"protocol": "https",
+					"host": [
+						"{{tenant}}",
+						"evaplus",
+						"com"
+					],
+					"path": [
+						"EvaCloudAPI",
+						"getVehicleFleet"
+					]
+				},
+				"description": "update token from login body in order to do a proper request \r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "fleet/overview",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log(\"waiting \"+pm.variables.get(\"timeout\")+\"ms\");\r",
+							"setTimeout(() => {}, pm.variables.get(\"timeout\")); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{evatoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{tenant}}.evaplus.com/EvaCloudAPI/fleet/overview",
+					"protocol": "https",
+					"host": [
+						"{{tenant}}",
+						"evaplus",
+						"com"
+					],
+					"path": [
+						"EvaCloudAPI",
+						"fleet",
+						"overview"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getEventnamelist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"  \r",
+							"});\r",
+							"pm.test(\"content is json\", () => {\r",
+							"  pm.response.to.be.json;  \r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"let responseData=pm.response.json();\r",
+							"console.log(responseData);\r",
+							"pm.environment.set(\"eventname\", responseData.events[1]);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log(\"waiting \"+pm.variables.get(\"timeout\")+\"ms\");\r",
+							"setTimeout(() => {}, pm.variables.get(\"timeout\")); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{evatoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{tenant}}.evaplus.com/EvaCloudAPI/getEventNameList",
+					"protocol": "https",
+					"host": [
+						"{{tenant}}",
+						"evaplus",
+						"com"
+					],
+					"path": [
+						"EvaCloudAPI",
+						"getEventNameList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getEvents",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							"pm.test(\"content is json\", () => {\r",
+							"  pm.response.to.be.json;  \r",
+							"});\r",
+							"\r",
+							"pm.test(\"within user limit\", function () \r",
+							"{\r",
+							"    pm.expect(pm.response.text()).to.not.include(\"User limit exceeded!\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log(\"waiting \"+pm.variables.get(\"timeout\")+\"ms\");\r",
+							"setTimeout(() => {}, pm.variables.get(\"timeout\")); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{evatoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"vehicleId\" : \"357005_A\",\r\n    \"startTime\": \"202110010000\",\r\n    \"endTime\": \"202110010300\",\r\n    \"events\": [{{eventname}}],\r\n    \"page\": \"0\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{tenant}}.evaplus.com/EvaCloudAPI/getEvents",
+					"protocol": "https",
+					"host": [
+						"{{tenant}}",
+						"evaplus",
+						"com"
+					],
+					"path": [
+						"EvaCloudAPI",
+						"getEvents"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "teloc manager get recorder",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							"pm.test(\"content is json\", () => {\r",
+							"  pm.response.to.be.json;  \r",
+							"});\r",
+							"\r",
+							"//check if response body contains a string\r",
+							"tests[\"Body contains vehicle id\"] = responseBody.has(\"vehicle_id\");\r",
+							"\r",
+							"\r",
+							"//response time is less than 200ms\r",
+							"tests[\"Response time is less than 200ms\"] = responseTime < 200;\r",
+							"\r",
+							"//response time is within a specific range\r",
+							"//(lower bound inclusive, upper bound exclusive)\r",
+							"tests[\"Response time is acceptable\"] = _.inRange(responseTime, 100, 1001);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log(\"waiting \"+pm.variables.get(\"timeout\")+\"ms\");\r",
+							"setTimeout(() => {}, pm.variables.get(\"timeout\")); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{evatoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{tenant}}.evaplus.com/EvaCloudAPI/teloc/getRecorderList",
+					"protocol": "https",
+					"host": [
+						"{{tenant}}",
+						"evaplus",
+						"com"
+					],
+					"path": [
+						"EvaCloudAPI",
+						"teloc",
+						"getRecorderList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getRecorderVehicle",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							"pm.test(\"content is json\", () => {\r",
+							"  pm.response.to.be.json;  \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{evatoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{tenant}}.evaplus.com/EvaCloudAPI/getRecorderVehicle",
+					"protocol": "https",
+					"host": [
+						"{{tenant}}",
+						"evaplus",
+						"com"
+					],
+					"path": [
+						"EvaCloudAPI",
+						"getRecorderVehicle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getSignalList",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log(\"waiting \"+pm.variables.get(\"timeout\")+\"ms\");\r",
+							"setTimeout(() => {}, pm.variables.get(\"timeout\")); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{evatoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{tenant}}.evaplus.com/EvaCloudAPI/getSignalNameList?vehicleId=357002_B",
+					"protocol": "https",
+					"host": [
+						"{{tenant}}",
+						"evaplus",
+						"com"
+					],
+					"path": [
+						"EvaCloudAPI",
+						"getSignalNameList"
+					],
+					"query": [
+						{
+							"key": "vehicleId",
+							"value": "357002_B"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getSignals small",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log(\"waiting \"+pm.variables.get(\"timeout\")+\"ms\");\r",
+							"setTimeout(() => {}, pm.variables.get(\"timeout\")); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{evatoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n    \"vehicleId\" : \"357002_B\",\r\n    \"recorderId\": \"16106710\",\r\n    \"startTime\": \"202111101804\",\r\n    \"endTime\": \"202111101810\",\r\n    \"signals\": [\"System_SPEED\"],\r\n    \"page\": \"0\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{tenant}}.evaplus.com/EvaCloudAPI/getSignals",
+					"protocol": "https",
+					"host": [
+						"{{tenant}}",
+						"evaplus",
+						"com"
+					],
+					"path": [
+						"EvaCloudAPI",
+						"getSignals"
+					]
+				},
+				"description": "get signals (error)"
+			},
+			"response": []
+		},
+		{
+			"name": "getSignals large",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log(\"waiting \"+pm.variables.get(\"timeout\")+\"ms\");\r",
+							"setTimeout(() => {}, pm.variables.get(\"timeout\")); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{evatoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n    \"vehicleId\" : \"357002_B\",\r\n    \"recorderId\": \"16106710\",\r\n    \"startTime\": \"202111101000\",\r\n    \"endTime\": \"202111101900\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{tenant}}.evaplus.com/EvaCloudAPI/getSignals",
+					"protocol": "https",
+					"host": [
+						"{{tenant}}",
+						"evaplus",
+						"com"
+					],
+					"path": [
+						"EvaCloudAPI",
+						"getSignals"
+					]
+				},
+				"description": "get signals (error)"
+			},
+			"response": []
+		},
+		{
+			"name": "recording count",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log(\"waiting \"+pm.variables.get(\"timeout\")+\"ms\");\r",
+							"setTimeout(() => {}, pm.variables.get(\"timeout\")); \r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{evatoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"vehicleId\" : \"357005_A\",\r\n    \"startTime\": \"202110010000\",\r\n    \"endTime\": \"202110020300\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{tenant}}.evaplus.com/EvaCloudAPI/teloc/getRecordingCounts?vehicleId=357001_A&startTime=202110010000&endTime=202110020300",
+					"protocol": "https",
+					"host": [
+						"{{tenant}}",
+						"evaplus",
+						"com"
+					],
+					"path": [
+						"EvaCloudAPI",
+						"teloc",
+						"getRecordingCounts"
+					],
+					"query": [
+						{
+							"key": "vehicleId",
+							"value": "357001_A"
+						},
+						{
+							"key": "startTime",
+							"value": "202110010000"
+						},
+						{
+							"key": "endTime",
+							"value": "202110020300"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "recording count specific",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log(\"waiting \"+pm.variables.get(\"timeout\")+\"ms\");\r",
+							"setTimeout(() => {}, pm.variables.get(\"timeout\")); \r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{evatoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"vehicleId\" : \"357005_A\",\r\n    \"startTime\": \"202110010000\",\r\n    \"endTime\": \"202110020300\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{tenant}}.evaplus.com/EvaCloudAPI/teloc/getRecordingCounts?vehicleId=357001_A&startTime=202110010000&endTime=202110020300",
+					"protocol": "https",
+					"host": [
+						"{{tenant}}",
+						"evaplus",
+						"com"
+					],
+					"path": [
+						"EvaCloudAPI",
+						"teloc",
+						"getRecordingCounts"
+					],
+					"query": [
+						{
+							"key": "vehicleId",
+							"value": "357001_A"
+						},
+						{
+							"key": "startTime",
+							"value": "202110010000"
+						},
+						{
+							"key": "endTime",
+							"value": "202110020300"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getLocations",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							"pm.test(\"content is json\", () => {\r",
+							"  pm.response.to.be.json;  \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{evatoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{tenant}}.evaplus.com/EvaCloudAPI/fleet/getLocations",
+					"protocol": "https",
+					"host": [
+						"{{tenant}}",
+						"evaplus",
+						"com"
+					],
+					"path": [
+						"EvaCloudAPI",
+						"fleet",
+						"getLocations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{evatoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{tenant}}.evaplus.com/EvaCloudAPI/logout",
+					"protocol": "https",
+					"host": [
+						"{{tenant}}",
+						"evaplus",
+						"com"
+					],
+					"path": [
+						"EvaCloudAPI",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "timeout",
+			"value": "3000"
+		},
+		{
+			"key": "tenant",
+			"value": "TNT"
+		},
+		{
+			"key": "apiuser",
+			"value": "evaplususername"
+		},
+		{
+			"key": "apipw",
+			"value": "loginpassword from EVA"
+		}
+	]
+}
